@@ -1,0 +1,9 @@
+apiVersion:
+kind: Service
+metadata:
+ name: external-service
+selector:
+ type: ExternalName
+ externalName: api.myexperiments.com
+ ports:
+  port: 9000

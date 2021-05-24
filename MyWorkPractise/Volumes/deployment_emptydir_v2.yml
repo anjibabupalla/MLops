@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: my-nginx
+ labels:
+  app: my-nginx
+spec:
+ replicas: 3
+ selector:
+  matchLabels: 
+   app: my-nginx
+ template: 
+  metadata: 
+   labels:
+    app: my-nginx
+  spec:
+   volumes:
+   - name: html
+     emptyDir: {}
+   containers:
+   - name: my-nginx
+     image: nginx:alpine
+     ports:
+     - containerPort: 80
+     volumeMounts:
+      - name: html
+        mountPath: /usr/share/nginx/html
+        readOnly: true
+   - name: html-updater
+     image: alpine
+     volumeMounts:
+     - name: html
+       mountPath: /html
+     command: ["/bin/sh","-c"]
+     args:
+     - while true; do date >> /html/index.html; sleep 10; done
+      
+    
